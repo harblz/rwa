@@ -19,6 +19,10 @@ django-htmx = "^1.19"
 fontawesomefree = "^6.6.0"
 django-ckeditor-5 = "^0.2.13"
 black = {extras = ["d"], version = "^24.10.0"}
+django-cms = "^4.1.4"
+djangocms-versioning = "^2.2.0"
+djangocms-alias = "^2.0.2"
+django-sekizai = "^4.1.0"
 
 [tool.poetry.group.dev]
 optional = true

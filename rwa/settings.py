@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
+
 import os
 from pathlib import Path
 import sys
@@ -21,39 +22,52 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-wzz_7ma79$#710(tsu5&_9m4at95qchj&3hhllh_@0!xjxy9u1'
+SECRET_KEY = "django-insecure-wzz_7ma79$#710(tsu5&_9m4at95qchj&3hhllh_@0!xjxy9u1"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", False) == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(":")
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'blog.apps.BlogConfig',
-    'django_simple_bulma',
-    'whitenoise.runserver_nostatic',
-    'django_ckeditor_5',
-    'taggit',
+    "djangocms_admin_style",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "blog.apps.BlogConfig",
+    "whitenoise.runserver_nostatic",
+    "django_ckeditor_5",
+    "django.contrib.sites",
+    "cms",
+    "menus",
+    "treebeard",
+    "taggit",
+    "sekizai",
+    "djangocms_versioning",
+    "djangocms_alias",
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
+    "cms.middleware.user.CurrentUserMiddleware",
+    "cms.middleware.page.CurrentPageMiddleware",
+    "cms.middleware.toolbar.ToolbarMiddleware",
+    "cms.middleware.language.LanguageCookieMiddleware",
+    "cms.middleware.utils.ApphookReloadMiddleware",
 ]
 
 # Debug Toolbar and Extensions only when `DEBUG = False` and not running tests
@@ -62,7 +76,7 @@ if ENABLE_DEBUG_TOOLBAR:
     hide_toolbar_patterns = ["/media/", "/static/"]
     INSTALLED_APPS += [
         "debug_toolbar",
-        #"django_extensions",
+        "django_extensions",
     ]
     MIDDLEWARE[:0] = [
         "debug_toolbar.middleware.DebugToolbarMiddleware",
@@ -81,7 +95,8 @@ if ENABLE_DEBUG_TOOLBAR:
     }
     RUNSERVERPLUS_POLLER_RELOADER_INTERVAL = 1
 
-ROOT_URLCONF = 'rwa.urls'
+X_FRAME_OPTIONS = "SAMEORIGIN"
+ROOT_URLCONF = "rwa.urls"
 
 TEMPLATES = [
     {
@@ -95,21 +110,25 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.media",
+                "django.template.context_processors.i18n",
+                "sekizai.context_processors.sekizai",
+                "cms.context_processors.cms_settings",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'rwa.wsgi.application'
+WSGI_APPLICATION = "rwa.wsgi.application"
+SITE_ID = 1
 
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
@@ -119,16 +138,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -136,22 +155,22 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
+LANGUAGE_CODE = "en"
+LANGUAGES = [
+    ("en", "English"),
+]
 USE_I18N = True
-
+TIME_ZONE = "UTC"
 USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-    BASE_DIR / 'blog/static',
+    BASE_DIR / "static",
+    BASE_DIR / "blog/static",
 ]
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 
@@ -161,7 +180,7 @@ MEDIA_URL = "/media/"
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Whitenoise - Want forever-cacheable files and compression support? Just add this to your settings file:
 STORAGES = {
@@ -171,130 +190,171 @@ STORAGES = {
     },
 }
 
-# Custom settings for django-simple-bulma
-STATICFILES_FINDERS = [
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'django_simple_bulma.finders.SimpleBulmaFinder',
-]
-
-# Custom settings for django-simple-bulma
-BULMA_SETTINGS = {
-  "extensions": [
-    "bulma-collapsible",
-    "bulma-calendar",
-  ],
-  "variables": {
-    "primary": "#000000",
-    "size-1": "6rem",
-  },
-  "alt_variables": {
-    "primary": "#fff",
-    "scheme-main": "#000",
-  },
-  "output_style": "compressed",
-  "fontawesome_token": "e761a01be3",
-}
 
 # Custom settings for django-ckeditor-5
 customColorPalette = [
-        {
-            'color': 'hsl(4, 90%, 58%)',
-            'label': 'Red'
-        },
-        {
-            'color': 'hsl(340, 82%, 52%)',
-            'label': 'Pink'
-        },
-        {
-            'color': 'hsl(291, 64%, 42%)',
-            'label': 'Purple'
-        },
-        {
-            'color': 'hsl(262, 52%, 47%)',
-            'label': 'Deep Purple'
-        },
-        {
-            'color': 'hsl(231, 48%, 48%)',
-            'label': 'Indigo'
-        },
-        {
-            'color': 'hsl(207, 90%, 54%)',
-            'label': 'Blue'
-        },
-    ]
+    {"color": "hsl(4, 90%, 58%)", "label": "Red"},
+    {"color": "hsl(340, 82%, 52%)", "label": "Pink"},
+    {"color": "hsl(291, 64%, 42%)", "label": "Purple"},
+    {"color": "hsl(262, 52%, 47%)", "label": "Deep Purple"},
+    {"color": "hsl(231, 48%, 48%)", "label": "Indigo"},
+    {"color": "hsl(207, 90%, 54%)", "label": "Blue"},
+]
 
-CKEDITOR_5_CUSTOM_CSS = 'css/ckeditor5/admin_dark_mode_fix.css'
-CKEDITOR_5_FILE_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage" # optional
+CKEDITOR_5_CUSTOM_CSS = "css/ckeditor5/admin_dark_mode_fix.css"
+CKEDITOR_5_FILE_STORAGE = (
+    "whitenoise.storage.CompressedManifestStaticFilesStorage"  # optional
+)
 CKEDITOR_5_CONFIGS = {
-    'default': {
-        'toolbar': ['heading', 
-                    '|', 
-                    'bold', 'italic', 'strikethrough', 'subscript', 'superscript', 'code',
-                    '|', 
-                    'indent','outdent',                    
-                    '|', 
-                    'link',
-                    '|', 
-                    'fontfamily', 'fontsize', 'fontColor', 'fontBackgroundColor',
-                    '|', 
-                    'bulletedList', 'numberedList', 'blockQuote', 'imageUpload', ],
-
-    },
-    'extends': {
-        'blockToolbar': [
-            'paragraph', 'heading1', 'heading2', 'heading3',
-            '|',
-            'bulletedList', 'numberedList',
-            '|',
-            'blockQuote',
+    "default": {
+        "toolbar": [
+            "heading",
+            "|",
+            "bold",
+            "italic",
+            "strikethrough",
+            "subscript",
+            "superscript",
+            "code",
+            "|",
+            "indent",
+            "outdent",
+            "|",
+            "link",
+            "|",
+            "fontfamily",
+            "fontsize",
+            "fontColor",
+            "fontBackgroundColor",
+            "|",
+            "bulletedList",
+            "numberedList",
+            "blockQuote",
+            "imageUpload",
         ],
-        'toolbar': ['heading', '|', 'outdent', 'indent', '|', 'bold', 'italic', 'link', 'underline', 'strikethrough',
-        'code','subscript', 'superscript', 'highlight', '|', 'codeBlock', 'sourceEditing', 'insertImage',
-                    'bulletedList', 'numberedList', 'todoList', '|',  'blockQuote', 'imageUpload', '|',
-                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'mediaEmbed', 'removeFormat',
-                    'insertTable',],
-        'image': {
-            'toolbar': ['imageTextAlternative', '|', 'imageStyle:alignLeft',
-                        'imageStyle:alignRight', 'imageStyle:alignCenter', 'imageStyle:side',  '|'],
-            'styles': [
-                'full',
-                'side',
-                'alignLeft',
-                'alignRight',
-                'alignCenter',
-            ]
-
+    },
+    "extends": {
+        "blockToolbar": [
+            "paragraph",
+            "heading1",
+            "heading2",
+            "heading3",
+            "|",
+            "bulletedList",
+            "numberedList",
+            "|",
+            "blockQuote",
+        ],
+        "toolbar": [
+            "heading",
+            "|",
+            "outdent",
+            "indent",
+            "|",
+            "bold",
+            "italic",
+            "link",
+            "underline",
+            "strikethrough",
+            "code",
+            "subscript",
+            "superscript",
+            "highlight",
+            "|",
+            "codeBlock",
+            "sourceEditing",
+            "insertImage",
+            "bulletedList",
+            "numberedList",
+            "todoList",
+            "|",
+            "blockQuote",
+            "imageUpload",
+            "|",
+            "fontSize",
+            "fontFamily",
+            "fontColor",
+            "fontBackgroundColor",
+            "mediaEmbed",
+            "removeFormat",
+            "insertTable",
+        ],
+        "image": {
+            "toolbar": [
+                "imageTextAlternative",
+                "|",
+                "imageStyle:alignLeft",
+                "imageStyle:alignRight",
+                "imageStyle:alignCenter",
+                "imageStyle:side",
+                "|",
+            ],
+            "styles": [
+                "full",
+                "side",
+                "alignLeft",
+                "alignRight",
+                "alignCenter",
+            ],
         },
-        'table': {
-            'contentToolbar': [ 'tableColumn', 'tableRow', 'mergeTableCells',
-            'tableProperties', 'tableCellProperties' ],
-            'tableProperties': {
-                'borderColors': customColorPalette,
-                'backgroundColors': customColorPalette
+        "table": {
+            "contentToolbar": [
+                "tableColumn",
+                "tableRow",
+                "mergeTableCells",
+                "tableProperties",
+                "tableCellProperties",
+            ],
+            "tableProperties": {
+                "borderColors": customColorPalette,
+                "backgroundColors": customColorPalette,
             },
-            'tableCellProperties': {
-                'borderColors': customColorPalette,
-                'backgroundColors': customColorPalette
-            }
+            "tableCellProperties": {
+                "borderColors": customColorPalette,
+                "backgroundColors": customColorPalette,
+            },
         },
-        'heading' : {
-            'options': [
-                { 'model': 'paragraph', 'title': 'Paragraph', 'class': 'ck-heading_paragraph' },
-                { 'model': 'heading1', 'view': 'h1', 'title': 'Heading 1', 'class': 'ck-heading_heading1' },
-                { 'model': 'heading2', 'view': 'h2', 'title': 'Heading 2', 'class': 'ck-heading_heading2' },
-                { 'model': 'heading3', 'view': 'h3', 'title': 'Heading 3', 'class': 'ck-heading_heading3' }
+        "heading": {
+            "options": [
+                {
+                    "model": "paragraph",
+                    "title": "Paragraph",
+                    "class": "ck-heading_paragraph",
+                },
+                {
+                    "model": "heading1",
+                    "view": "h1",
+                    "title": "Heading 1",
+                    "class": "ck-heading_heading1",
+                },
+                {
+                    "model": "heading2",
+                    "view": "h2",
+                    "title": "Heading 2",
+                    "class": "ck-heading_heading2",
+                },
+                {
+                    "model": "heading3",
+                    "view": "h3",
+                    "title": "Heading 3",
+                    "class": "ck-heading_heading3",
+                },
             ]
+        },
+    },
+    "list": {
+        "properties": {
+            "styles": "true",
+            "startIndex": "true",
+            "reversed": "true",
         }
     },
-    'list': {
-        'properties': {
-            'styles': 'true',
-            'startIndex': 'true',
-            'reversed': 'true',
-        }
-    }
 }
 
 # Define a constant in settings.py to specify file upload permissions
-CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"  # Possible values: "staff", "authenticated",
+CKEDITOR_5_FILE_UPLOAD_PERMISSION = (
+    "staff"  # Possible values: "staff", "authenticated",
+)
+
+# DjangoCMS settings
+CMS_CONFIRM_VERSION4 = True
