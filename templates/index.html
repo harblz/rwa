@@ -1,51 +1,7 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <meta name="description" content="Richmond Worker's Assembly">
-        <meta name="keywords" content="RWA">
-        <title>Richmond Worker's Assembly</title>
-   </head>
-   <body>
-        <nav>
-            {% include "navbar.html" %}
-        </nav> 
-        {% for post in posts %}
-        <section class="section">
-           <div class="container">
-
-                <div class="card">
-                <div class="card-content">
-                    <p class="title">
-                    {{ post.title }}
-                    </p>                    
-                    <p>
-                        {{ post.text|safe }}
-                    </p>
-                </div>
-                <footer class="card-footer">
-                    <p class="card-footer-item">
-                    <span>
-                        Posted by: <b>{{ post.author }}</b>
-                    </span>
-                    </p>
-                    <p class="card-footer-item">
-                    <span>
-                        {{ post.published_date}}
-                    </span>
-                    </p>
-                    <p class="card-footer-item">
-                    <span>
-                        {{ post.category}}
-                    </span>
-                    </p>
-                </footer>
-                </div>
-
-           </div>
-        </section>
-        {% endfor %}
-        
-   </body>
-   </html>
+{% extends "base.html" %}
+{% load cms_tags %}
+{% block content %}
+    {% placeholder "Feature" %}
+    {% placeholder "Content" %}
+    {% placeholder "Splashbox" %}
+{% endblock content %}

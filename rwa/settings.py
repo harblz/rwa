@@ -39,18 +39,37 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "django.contrib.staticfiles",
-    "blog.apps.BlogConfig",
     "whitenoise.runserver_nostatic",
-    "django_ckeditor_5",
+    "django.contrib.staticfiles",
     "django.contrib.sites",
-    "cms",
+    "django_ckeditor_5",
     "menus",
     "treebeard",
     "taggit",
     "sekizai",
     "djangocms_versioning",
     "djangocms_alias",
+    "easy_thumbnails",
+    "djangocms_frontend",
+    "djangocms_frontend.contrib.accordion",
+    "djangocms_frontend.contrib.alert",
+    "djangocms_frontend.contrib.badge",
+    "djangocms_frontend.contrib.card",
+    "djangocms_frontend.contrib.carousel",
+    "djangocms_frontend.contrib.collapse",
+    "djangocms_frontend.contrib.content",
+    "djangocms_frontend.contrib.grid",
+    "djangocms_frontend.contrib.image",
+    "djangocms_frontend.contrib.jumbotron",
+    "djangocms_frontend.contrib.link",
+    "djangocms_frontend.contrib.listgroup",
+    "djangocms_frontend.contrib.media",
+    "djangocms_frontend.contrib.tabs",
+    "djangocms_frontend.contrib.utilities",
+    "djangocms_text_ckeditor",
+    "cms",
+    "blog.apps.BlogConfig",
+    "blog_hook.apps.BlogHookConfig",
 ]
 
 MIDDLEWARE = [
@@ -116,6 +135,9 @@ TEMPLATES = [
             ],
         },
     },
+]
+CMS_TEMPLATES = [
+    ("index.html", "Test"),
 ]
 
 WSGI_APPLICATION = "rwa.wsgi.application"

@@ -1,3 +1,4 @@
+{% load cms_tags sekizai_tags menu_tags djangocms_alias_tags %}
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
     <head>
@@ -5,17 +6,31 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Richmond Worker's Assembly">
         <meta name="keywords" content="RWA">
-        <title>Richmond Worker's Assembly</title>
+        <title>{% page_attribute "page_title" %}</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+        {% render_block "css" %}
    </head>
     <body>
-
+        {% cms_toolbar %}
         <nav>
-            {% include "navbar.html" %}
+            <!-- {% include "navbar.html" %}-->
+            <ul class="nav">
+                {% show_menu 0 100 100 100 %}
+            </ul>
         </nav>
 
         {% block content %}
+            {% placeholder "Feature" %}
+            {% placeholder "Content" %}
+            {% placeholder "Splashbox" %}
         {% endblock content %}
-        
+
+         {% block footer %}
+         <footer>
+           {% static_alias "footer" %}
+         </footer>
+         {% endblock footer %}
+
+    {% render_block "js" %}
     </body>
 </html>

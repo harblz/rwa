@@ -25,21 +25,17 @@ from django.conf.urls.static import static
 # django debug_toolbar
 from debug_toolbar.toolbar import debug_toolbar_urls
 from django.conf.urls.i18n import i18n_patterns
-from django.urls import include, path
+from django.urls import include, path, re_path
 
 
 urlpatterns = (
-    [
-        path("admin/", admin.site.urls, name="admin"),
-        path("", include("blog.urls"), name="blog"),
-        path("ckeditor5/", include("django_ckeditor_5.urls")),
-    ]
+    i18n_patterns(
+        path("admin/", admin.site.urls),
+        re_path(r"^blog/", include("blog.urls")),
+        re_path(r"^", include("cms.urls")),
+    )
     + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-)
-
-urlpatterns += i18n_patterns(
-    path("cms/", include("cms.urls"), name="cms"),
 )
 
 if settings.DEBUG:
