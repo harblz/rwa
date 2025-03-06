@@ -31,8 +31,8 @@ from django.urls import include, path, re_path
 urlpatterns = (
     i18n_patterns(
         path("admin/", admin.site.urls),
-        re_path(r"^blog/", include("blog.urls")),
         re_path(r"^", include("cms.urls")),
+        path("ckeditor5/", include("django_ckeditor_5.urls")),
     )
     + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

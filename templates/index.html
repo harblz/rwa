@@ -1,5 +1,8 @@
 {% extends "base.html" %}
-{% load cms_tags %}
+{% load cms_tags menu_tags %}
+<ul class="nav">
+    {% show_menu 0 100 100 100 %}
+</ul>
 {% block content %}
     {% placeholder "Feature" %}
     {% placeholder "Content" %}

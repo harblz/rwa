@@ -3,5 +3,6 @@ from django.urls import path, re_path
 from . import views
 
 urlpatterns = [
-    re_path(r"^test/", views.test, name="test"),
+    path("<str:slug>/", views.post, name="post"),
+    path("test/", views.test, name="test"),
 ]

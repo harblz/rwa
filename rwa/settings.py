@@ -49,7 +49,10 @@ INSTALLED_APPS = [
     "sekizai",
     "djangocms_versioning",
     "djangocms_alias",
+    "filer",
+    "djangocms_icon",
     "easy_thumbnails",
+    "djangocms_link",
     "djangocms_frontend",
     "djangocms_frontend.contrib.accordion",
     "djangocms_frontend.contrib.alert",
@@ -199,6 +202,14 @@ STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesSto
 MEDIA_ROOT = BASE_DIR / "media/"
 MEDIA_URL = "/media/"
 
+THUMBNAIL_PROCESSORS = (
+    "easy_thumbnails.processors.colorspace",
+    "easy_thumbnails.processors.autocrop",
+    #'easy_thumbnails.processors.scale_and_crop',
+    "filer.thumbnail_processors.scale_and_crop_with_subject_location",
+    "easy_thumbnails.processors.filters",
+)
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
@@ -206,7 +217,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Whitenoise - Want forever-cacheable files and compression support? Just add this to your settings file:
 STORAGES = {
-    # ...
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
